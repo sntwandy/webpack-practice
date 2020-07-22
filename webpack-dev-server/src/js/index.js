@@ -1,4 +1,12 @@
 import '../css/styles.css';
-console.log('Hello Megan E.');
+import text from './text';
 
-document.body.innerHTML = '<p>Hello World from Webpack!!</p>'
+console.log('Hello Megan E.');
+text();
+
+if (module.hot) {
+  module.hot.accept('./text.js', function () {
+    console.log('Recargued!!');
+    text();
+  });
+}
