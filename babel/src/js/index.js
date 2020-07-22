@@ -1,12 +1,9 @@
 import '../css/styles.css';
-import text from './text';
+import search from './search';
+import render from './render';
 
-console.log('Hello Megan E.');
-text();
+const id = prompt('Type and id');
 
-if (module.hot) {
-  module.hot.accept('./text.js', function () {
-    console.log('Recargued!!');
-    text();
-  });
-}
+search(id)
+  .then(data => render(data))
+  .catch(err => console.error(err));
