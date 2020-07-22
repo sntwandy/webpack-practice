@@ -14,3 +14,14 @@ p {
   margin: 0px;
   padding: 0px;
 }
+
+button {
+  background-color: lightblue;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  width: 350px;
+  height: 30px;
+  font-size: 20px;
+
+}
