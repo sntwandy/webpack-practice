@@ -5,10 +5,8 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    home: path.resolve(__dirname, 'src/js/index.js'),
-    contact: path.resolve(__dirname, 'src/js/contact.js'),
+    app: path.resolve(__dirname, './src/index.js'),
   },
-  mode: 'production',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].js',
@@ -25,43 +23,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-            }
-          },
-          'postcss-loader'
-        ]
-      },
-      {
-        test: /\.less$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          'css-loader',
-          'less-loader',
-        ]
-      },
-      {
-        test: /\.styl$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          'css-loader',
-          'stylus-loader',
-        ]
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          'css-loader',
-          'sass-loader',
+          'css-loader'
         ]
       },
       {
@@ -69,16 +31,15 @@ module.exports = {
         use: {
           loader: 'url-loader',
           options: {
-            limits: 9000,
+            limit: 1000,
           }
         },
       }
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname ,'./src/index.html'),
+      template: path.resolve(__dirname ,'./public/index.html'),
       filename: './index.html'
     }),
     new MiniCssExtractPlugin({
