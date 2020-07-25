@@ -6,37 +6,53 @@ const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const VueLoader = require('vue-loader/lib/plugin');
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, './src/index.js'),
+    app: path.resolve(__dirname, './src/main.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].[hash].js',
-    publicPath: 'http://localhost:3001/',
-    chunkFilename: 'js/[id].[chunkhash].js'
+    // publicPath: 'http://localhost:3001/',
+    chunkFilename: 'js/[id].[chunkhash].js',
   },
   optimization: {
     minimizer: [
       new TerserJSPlugin(),
       new OptimizeCssAssetsPlugin(),
-    ]
+    ],
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
   },
   module: {
     rules: [
+      {
+        test: /\.vue$/,
+        use: 'vue-loader',
+      },
       {
         test: /\.js$/,
         use: 'babel-loader',
         exclude: /node_modules/
       },
       {
-        test: /\.css$/,
+        test: /\.css|postcss$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader
+            loader: MiniCssExtractPlugin.loader,
           },
-          'css-loader'
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+            },
+          },
+          'postcss-loader',
         ]
       },
       {
@@ -47,12 +63,13 @@ module.exports = {
             limit: 1000,
             name: '[hash].[ext]',
             outputPath: 'assets',
-          }
+          },
         },
-      }
-    ]
+      },
+    ],
   },
   plugins: [
+    new VueLoader(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname ,'./public/index.html'),
       filename: './index.html'
@@ -67,7 +84,7 @@ module.exports = {
     new AddAssetHtmlWebpackPlugin({
       filepath: path.resolve(__dirname, 'dist/js/*.dll.js'),
       outputPath: 'js',
-      publicPath: 'http://localhost:3001/js',
+      publicPath: 'js',
     }),
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ['**/app.*']
